@@ -23,7 +23,7 @@ def main(argv):
             connection, client_address = sock.accept()
             print client_address, "Got connection"
             while True:
-                connection.sendall('1')
+                connection.sendall('AF')
                 data = connection.recv(8)
                 assembled_size_metadata = struct.unpack('I I', data[0:8])
                 print "ass size: ", assembled_size_metadata
