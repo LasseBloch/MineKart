@@ -30,7 +30,10 @@ def main(argv):
 
 def pack_image(width, height):
        # Capture frame-by-frame
-       ret, frame = cap.read()
+       ret = 0
+       frame = 0
+       for i in range(5):
+           ret, frame = cap.read()
        if (ret):
            small_image = cv2.resize(frame, (width, height))
            flat_img = small_image.flatten()
