@@ -7,6 +7,7 @@ import sys
 import socket
 import time
 import RPi.GPIO as GPIO
+from signal import *
 
 
 cap = cv2.VideoCapture(0)
@@ -23,6 +24,8 @@ def main(argv):
     if (len(sys.argv) != 3):
         print "You must provide two arguments: ip port"
     else:
+        for sig in (SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM):
+            signal(sig, clean)
         setup_gpio()
         destination = str(sys.argv[1])
         port = int(sys.argv[2])
@@ -90,7 +93,12 @@ def control_motors(motor_a_direction, motor_b_direction):
         GPIO.output(motor_b_pin1, GPIO.LOW)
         GPIO.output(motor_b_pin2, GPIO.LOW)
 
-
+def clean(*args):
+    GPIO.output(motor_b_pin1, GPIO.LOW)
+    GPIO.output(motor_b_pin2, GPIO.LOW)
+    GPIO.output(motor_a_pin1, GPIO.LOW)
+    GPIO.output(motor_a_pin2, GPIO.LOW)
+    sys.exit(0)
 
 
 if __name__ == "__main__":
