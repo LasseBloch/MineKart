@@ -34,7 +34,7 @@ class McPictureDrawer:
 		(35,13, 53,71,27),
 		(35,14, 151,52,49),
 		(35,15, 26,22,22),
-        (159,0,210,178,161), # ID: 159 = Clay
+                (159,0,210,178,161), # ID: 159 = Clay
 		(159,1,162,84,38),
 		(159,2,150,88,109),
 		(159,3,113,109,138),
@@ -50,10 +50,10 @@ class McPictureDrawer:
 		(159,13,76,83,42),
 		(159,14,143,61,47),
 		(159,15,37,23,16),
-        (155,0,232,228,220), # ID: 155 = Quartz
-        (152,0,164,26,9), # ID: 152 = Redstone
-        (41,0,250,239,80), # ID: Gold block
-        (173,0,19,19,19) ) # ID: Coal Block
+                (155,0,232,228,220), # ID: 155 = Quartz
+                (152,0,164,26,9), # ID: 152 = Redstone
+                (41,0,250,239,80), # ID: Gold block
+                (173,0,19,19,19) ) # ID: Coal Block
 
     def __init__(self, mc_):
         self.mc = mc_
@@ -94,17 +94,17 @@ class McPictureDrawer:
 
 
 def main():
-	port = 2253
-	pos = mc.player.getTilePos()
+    port = 2253
+    pos = mc.player.getTilePos()
     pos.x = -10
     pos.y = 0
     pos.z = -10
         
-	width = 80
-	height = 60
+    width = 80
+    height = 60
 
-	dut = McPictureDrawer(mc)
-	dut.setPicturePosition(pos.x + (width/2), pos.y, pos.z + 30)
+    dut = McPictureDrawer(mc)
+    dut.setPicturePosition(pos.x + (width/2), pos.y, pos.z + 30)
 
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -116,12 +116,15 @@ def main():
         sock.listen(1)
         connection, client_address = sock.accept()
         mc.postToChat("READY TO ROLL!!!")
+
+        car_cmd = "00"
+        engine_on = False
+        
         while True:
 
-            car_cmd = "00"
-            engine_on = False
 
             # get latest command
+            LOG_FILE = "/home/bloch/Desktop/mineKart_server/logs/latest.log"
             with open(LOG_FILE) as fd:
                 log_data = fd.read()
                 # Strip all but latest 20 char
@@ -134,27 +137,31 @@ def main():
                 left_idx = latest.find("####left")
                 key_idx = latest.find("#####key")
 
-                if( forward_idx >= 0 and reverse_idx < 0 and right_idx < 0 and left_idx < 0 key_idx < 0 ):
+                if( forward_idx >= 0 and reverse_idx < 0 and right_idx < 0 and left_idx < 0 and key_idx < 0 ):
                     if( engine_on ):
                         car_cmd = "FF"
+                        mc.postToChat("Going Forward")
                     else:
                         car_cmd = "00"
-                elif( forward_idx < 0 and reverse_idx >= 0 and right_idx < 0 and left_idx < 0 key_idx < 0 ):
+                elif( forward_idx < 0 and reverse_idx >= 0 and right_idx < 0 and left_idx < 0 and key_idx < 0 ):
                     if( engine_on ):
                         car_cmd = "BB"
+                        mc.postToChat("Going Reverse")
                     else:
                         car_cmd = "00"
-                elif( forward_idx < 0 and reverse_idx < 0 and right_idx >= 0 and left_idx < 0 key_idx < 0 ):
+                elif( forward_idx < 0 and reverse_idx < 0 and right_idx >= 0 and left_idx < 0 and key_idx < 0 ):
                     if( engine_on ):
                         car_cmd = "0F"
+                        mc.postToChat("Going Right")
                     else:
                         car_cmd = "00"
-                elif( forward_idx < 0 and reverse_idx < 0 and right_idx < 0 and left_idx >= 0 key_idx < 0 ):
+                elif( forward_idx < 0 and reverse_idx < 0 and right_idx < 0 and left_idx >= 0 and key_idx < 0 ):
                     if( engine_on ):
                         car_cmd = "F0"
+                        mc.postToChat("Going Left")
                     else:
                         car_cmd = "00"
-                elif( forward_idx < 0 and reverse_idx < 0 and right_idx < 0 and left_idx < 0 key_idx >= 0 ):
+                elif( forward_idx < 0 and reverse_idx < 0 and right_idx < 0 and left_idx < 0 and key_idx >= 0 ):
                     car_cmd = "00"
                     if( engine_on ):
                         mc.postToChat("Engine off")
@@ -185,7 +192,7 @@ def unpack_image(packed_image):
     testnp = np.asarray(convertedBack, dtype=np.uint8)
 
     assembledImg = np.reshape(testnp, (assembled_size_metadata[1], assembled_size_metadata[0], 3))
-	return assembledImg
+    return assembledImg
 
 if __name__ == "__main__":
    main()
