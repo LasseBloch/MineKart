@@ -118,7 +118,7 @@ def main():
         mc.postToChat("READY TO ROLL!!!")
 
         car_cmd = "00"
-        engine_on = False
+        engine_on = True
         
         while True:
 
@@ -140,36 +140,37 @@ def main():
                 if( forward_idx >= 0 and reverse_idx < 0 and right_idx < 0 and left_idx < 0 and key_idx < 0 ):
                     if( engine_on ):
                         car_cmd = "FF"
-                        mc.postToChat("Going Forward")
+                        #mc.postToChat("Going Forward")
                     else:
                         car_cmd = "00"
                 elif( forward_idx < 0 and reverse_idx >= 0 and right_idx < 0 and left_idx < 0 and key_idx < 0 ):
                     if( engine_on ):
                         car_cmd = "BB"
-                        mc.postToChat("Going Reverse")
+                        #mc.postToChat("Going Reverse")
                     else:
                         car_cmd = "00"
                 elif( forward_idx < 0 and reverse_idx < 0 and right_idx >= 0 and left_idx < 0 and key_idx < 0 ):
                     if( engine_on ):
-                        car_cmd = "0F"
-                        mc.postToChat("Going Right")
+                        car_cmd = "F0"
+                        #mc.postToChat("Going Right")
                     else:
                         car_cmd = "00"
                 elif( forward_idx < 0 and reverse_idx < 0 and right_idx < 0 and left_idx >= 0 and key_idx < 0 ):
                     if( engine_on ):
-                        car_cmd = "F0"
-                        mc.postToChat("Going Left")
+                        car_cmd = "0F"
+                        #mc.postToChat("Going Left")
                     else:
                         car_cmd = "00"
                 elif( forward_idx < 0 and reverse_idx < 0 and right_idx < 0 and left_idx < 0 and key_idx >= 0 ):
                     car_cmd = "00"
+                    """                    
                     if( engine_on ):
                         mc.postToChat("Engine off")
                         engine_on = False
                     else:
                         engine_on = True
                         mc.postToChat("Engine on")
-
+                    """
             connection.sendall(car_cmd)
             data = connection.recv(8)
             assembled_size_metadata = struct.unpack('I I', data[0:8])
